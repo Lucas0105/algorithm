@@ -7,4 +7,7 @@
 ## 시작 기간
 2023-02-17 ~ 
 
+## 다른 스터디 모임과 병행
+https://github.com/yangDM9378/emp_Study
+
 ## 결과
