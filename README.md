@@ -75,10 +75,16 @@ O(nk)
 - https://www.acmicpc.net/problem/11051
 
 
+### 최장 증가 부분 수열(LIS) 알고리즘
+Longest Increasing Subsequence     
+```
+어떤 임의의 수열이 주어질 때, 이 수열에서 몇 개의 수들을 제거해서 부분수열을 만들 수 있다. 
+이때 만들어진 부분수열 중 오름차순으로 정렬된 가장 긴 수열을 최장 증가 부분 수열이라 한다.
+```
+
+
 ## 시작 기간
 2023-02-20 ~ 
 
-## 다른 스터디 모임과 병행
-https://github.com/yangDM9378/emp_Study
 
 ## 결과
