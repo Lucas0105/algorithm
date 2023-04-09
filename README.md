@@ -11,12 +11,12 @@
 어떠한 숫자를 다른 숫자로 나눈 나머지를 구하는 연산    
 - 성질 1
 ```
-(a + b) mode m = ((a mod m) + (b mod m)) mod m
+(a + b) mod m = ((a mod m) + (b mod m)) mod m
 ```
 
 - 성질 2
 ```
-(a * b) mode m = ((a mod m) * (b mod m)) mod m
+(a * b) mod m = ((a mod m) * (b mod m)) mod m
 ```
 
 - 증명 1
@@ -27,7 +27,7 @@ b mod m = S
 a = T + i*m (i는 임의의 정수)          
 b = S + j*m (j는 임의의 정수)   
 
-(a + b) mode m = ((a mod m) + (b mod m)) mod m
+(a + b) mod m = ((a mod m) + (b mod m)) mod m
 
 (T + i*m + S + j*m) mod m = (T + S + (i + j)m) mod m = (T + S) mod m
 
@@ -39,7 +39,7 @@ b = S + j*m (j는 임의의 정수)
 위의 증명 1과 동일한 방식으로 수행하면 성립합니다.
 
 ```
-(a * b) mode m = ((a mod m) * (b mod m)) mod m
+(a * b) mod m = ((a mod m) * (b mod m)) mod m
 ```
 
 
