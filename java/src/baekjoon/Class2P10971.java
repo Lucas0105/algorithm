@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class ClassP10971 {
+public class Class2P10971 {
 	static int N;
 	static int [][] graph;
 	static boolean [] visited;
