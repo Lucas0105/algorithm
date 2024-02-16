@@ -1,11 +1,63 @@
 #include<iostream>
 #include<vector>
+#include<cstring>
+#include<math.h>
 
 using namespace std;
 
 vector<vector<char>> superDNA;
 vector<vector<char>> DNA;
 int N, M;
+int* answer;
+
+int GetAnswer(int index)
+{
+	vector<int>bit;
+
+	if (answer[index] < N + 1)
+		return answer[index];
+
+	int number1 = 0;
+	int number2 = index;
+	int tmpIndex = index;
+	for (int i = 0; i < N; i++)
+	{
+		if (tmpIndex % 2 == 1)
+			bit.push_back(i);
+
+		tmpIndex /= 2;
+	}
+
+	int* digit = (int*)malloc(sizeof(int) * bit.size());
+	memset(digit, 0, sizeof(int) * bit.size());
+
+	for (int i = 1; i < pow(2, bit.size() - 1); i++)
+	{
+		for (int j = 0; j < bit.size(); j++)
+		{
+			if (digit[j] == 0)
+			{
+				digit[j] = 1;
+				int tmp = pow(2, bit[j]);
+				number1 += tmp;
+				number2 -= tmp;
+				break;
+			}
+			else {
+				digit[j] = 0;
+				int tmp = pow(2, bit[j]);
+				number1 -= tmp;
+				number2 += tmp;
+			}
+		}
+		int tmpResult = GetAnswer(number1) + GetAnswer(number2);
+
+		if (answer[index] > tmpResult)
+			answer[index] = tmpResult;
+	}
+	free(digit);
+	return answer[index];
+}
 
 vector<char> Merge(vector<char> dna1, vector<char> dna2)
 {
@@ -71,14 +123,21 @@ int main() {
 		MakeSuperDNA(i);
 	}
 
-	for (int i = 0; i < pow(2, N); i++)
+	answer = (int*)malloc(sizeof(int) * pow(2, N));
+	answer[0] = 0;
+
+	for (int i = 1; i < pow(2, N); i++)
 	{
-		for (int j = 0; j < M; j++)
-		{
-			if (superDNA[i].empty())
-				break;
-			cout << superDNA[i][j];
-		}
-		cout << "\n";
+		answer[i] = N + 1;
 	}
+
+	for (int i = 1; i < pow(2, N); i++)
+	{
+		if (superDNA[i].empty())
+			GetAnswer(i);
+		else
+			answer[i] = 1;
+	}
+
+	cout << answer[(int)pow(2, N) - 1];
 }
