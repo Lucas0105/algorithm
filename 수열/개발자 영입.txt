@@ -1,0 +1,13 @@
+12
+register 1 10 1 1 1
+register 2 100 2 3 4
+register 3 1 5 5 10
+register 4 200 0 0 0
+register 5 5 10 10 20
+hire_min
+update 2 0 30
+hire_min
+register 6 20 1 3 5
+register 7 20 10 10 10
+cancel 6
+hire_max
