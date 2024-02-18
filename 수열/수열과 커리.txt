@@ -1,0 +1,18 @@
+1
+16
+insert 5
+insert 10
+insert 20
+front 1
+front 5
+back 3
+back 5
+erase 10
+update 5 30
+front 1
+back 2
+erase 30
+erase 20
+erase 1
+front 3
+back 3
