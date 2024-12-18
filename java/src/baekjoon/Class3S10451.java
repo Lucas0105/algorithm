@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class S10451 {
+public class Class3S10451 {
     static int T, N;
     static int[] arr = new int[1001];
     static int[] visited = new int[1001];

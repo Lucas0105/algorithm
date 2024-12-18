@@ -1,6 +1,8 @@
+package baekjoon;
+
 import java.util.Scanner;
 
-public class Main {
+public class Class3S10810 {
     
   public static void main(String args[]) {
     int[] numArr = new int[101];
