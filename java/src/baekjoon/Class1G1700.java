@@ -51,8 +51,8 @@ public class Class1G1700 {
                         if(maxPos < j){
                             maxPos = j;
                             maxNum = arr[j];
-                            isMatch = true;
                         }
+                        isMatch = true;
                         break;
                     }
                 }
