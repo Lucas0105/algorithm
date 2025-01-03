@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Class3G7579 {
+public class Class3G7579_OneArr {
     static int N, M;
     static int[] mem;
     static int[] cost;
-    static int[][] dp;
+    static int[] dp;
     static int ans = (int)2e10;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,20 +31,20 @@ public class Class3G7579 {
             sumCost += cost[i];
         }
 
-        dp = new int[N+1][sumCost + 1];
+        dp = new int[sumCost + 1];
 
         for(int i = 1; i <= N; i++) {
             int cMem = mem[i];
             int cCos = cost[i];
 
-            for(int j = 0; j <= sumCost; j++) {
+            for(int j = sumCost; j >= 0; j--) {
                 if(cCos <= j){
-                    dp[i][j] = Math.max(dp[i-1][j-cCos] + cMem, dp[i - 1][j]);
+                    dp[j] = Math.max(dp[j-cCos] + cMem, dp[j]);
                 } else {
-                    dp[i][j] = dp[i - 1][j];
+                    break;
                 }
 
-                if(dp[i][j] >= M){
+                if(dp[j] >= M){
                     ans = Math.min(ans, j);
                 }
             }
