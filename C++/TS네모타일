@@ -1,0 +1,181 @@
+//user.cpp
+#include <vector>
+#include <unordered_map>
+#include <string>
+#include <string.h>
+
+using namespace std;
+#define MAX_N 999
+
+struct Tile {
+	Tile(int r, int c, int m){
+		rowPos = r;
+		colPos = c;
+		mId = m;
+	}
+	int rowPos, colPos, mId;
+};
+
+unordered_map<string, vector<Tile>> tileMap;
+unordered_map<int, string> mIdMap;
+
+bool tileVisited[MAX_N][MAX_N];
+
+string reverseNum(int number) {
+	if (number > 10) {
+		number -= 10;
+	}
+	else {
+		number += 10;
+	}
+	return to_string(number);
+}
+
+void init(int N, int mInfo[MAX_N][MAX_N])
+{
+	tileMap.clear();
+	mIdMap.clear();
+
+	for (int i = 0; i < N ; i++) {
+		for (int j = 0; j < N; j++) {
+			if (mInfo[i][j] == 0)
+				continue;
+
+			tileVisited[i][j] = false;
+		}
+	}
+
+	for (int i = 0; i < N - 2; i++) {
+		for (int j = 0; j < N - 2; j++) {
+			if (mInfo[i][j] == 0)
+				continue;
+
+			string numberSum =  reverseNum(mInfo[i][j]) + "|" + reverseNum(mInfo[i][j + 2]) +
+										"|" + reverseNum(mInfo[i + 1][j + 1]) + "|" +
+								reverseNum(mInfo[i + 2][j]) + "|" + reverseNum(mInfo[i+2][j + 2]) + "|";
+			Tile newTile(i, j, 0);
+			tileMap[numberSum].push_back(newTile);
+		}
+	}
+}
+
+int addRectTile(int mID, int mTile[3][3])
+{
+	vector<string> numberVec;
+	string baseNumber = "";
+	string backNumber = "";
+	int isNut = 0;
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (mTile[i][j] == 0)
+				continue;
+
+			if (mTile[i][j] > 10) {
+				isNut = mTile[i][j];
+			}
+ 			else if (isNut > 0) {
+				backNumber += to_string(mTile[i][j]) + "|" ;
+			}
+			else if (isNut == 0) {
+				baseNumber += to_string(mTile[i][j]) + "|" ;
+			}
+		}
+	}
+
+	if (isNut) {
+		if (baseNumber == "") {
+			numberVec.push_back(to_string(isNut) + "|" + backNumber);
+
+		}
+		else if (backNumber == "") {
+			numberVec.push_back(baseNumber + to_string(isNut) + "|");
+
+		}
+		else {
+			numberVec.push_back(baseNumber + to_string(isNut) + "|" + backNumber);
+		}
+		for (int i = 1; i <= 5; i++) {
+			if (baseNumber == "") {
+				numberVec.push_back(to_string(i) + "|" + backNumber);
+
+			}
+			else if (backNumber == "") {
+				numberVec.push_back(baseNumber + to_string(i) + "|");
+
+			}
+			else {
+				numberVec.push_back(baseNumber + to_string(i) + "|" + backNumber);
+
+			}
+		}
+	}
+	else {
+		numberVec.push_back(baseNumber);
+	}
+	int result = 1e9;
+	Tile* tmpTile = new Tile(-1, -1, -1);
+
+	for (int i = 0; i < numberVec.size(); i++) {
+		if (tileMap.count(numberVec[i]) == 0) {
+			continue;
+		}
+
+		for (int j = 0; j < tileMap[numberVec[i]].size(); j++) {
+			if (tileMap[numberVec[i]][j].mId != 0)
+				continue;
+
+			int col = tileMap[numberVec[i]][j].colPos;
+			int row = tileMap[numberVec[i]][j].rowPos;
+
+			if (tileVisited[row][col] || tileVisited[row][col + 2] ||
+				tileVisited[row + 1][col + 1] ||
+				tileVisited[row + 2][col] || tileVisited[row + 2][col + 2])
+				continue;
+
+			int tmpResult = row * 10000 + col;
+			if (result > tmpResult) {
+				result = tmpResult;
+				mIdMap[mID] = numberVec[i];
+				tmpTile = &tileMap[numberVec[i]][j];
+			}
+		}
+	}
+
+	if (result == 1e9)
+		return -1;
+	else {
+		tmpTile->mId = mID;
+		int col = tmpTile->colPos;
+		int row = tmpTile->rowPos;
+
+		tileVisited[row][col] = true; tileVisited[row][col + 2] = true;
+		tileVisited[row + 1][col + 1] = true;
+		tileVisited[row + 2][col] = true; tileVisited[row + 2][col + 2] = true;
+		
+		return result;
+	}
+}
+
+void removeRectTile(int mID)
+{
+	if (mIdMap.count(mID) == 0)
+		return;
+
+	string strNumber = mIdMap[mID];
+
+	for (int i = 0; i < tileMap[strNumber].size(); i++) {
+		if (tileMap[strNumber][i].mId == mID) {
+			tileMap[strNumber][i].mId = 0;
+			int col = tileMap[strNumber][i].colPos;
+			int row = tileMap[strNumber][i].rowPos;
+
+			tileVisited[row][col] = false; tileVisited[row][col + 2] = false;
+			tileVisited[row + 1][col + 1] = false;
+			tileVisited[row + 2][col] = false; tileVisited[row + 2][col + 2] = false;
+
+			return;
+		}
+	}
+}
+
