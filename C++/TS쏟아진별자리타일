@@ -1,0 +1,134 @@
+
+//user.cpp
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <string>
+
+using namespace std;
+#define MAX_SIZE	1000
+#define ROW_MULT    10000
+
+unordered_map<string, vector<int>> tileMap;
+unordered_map<int, string> posMap;
+unordered_set<string>* tileSet;
+
+
+unordered_set<string>* getTileInfo(int row, int col, int tileArray[MAX_SIZE][MAX_SIZE]) {
+	unordered_set<string>* newTileSet = new unordered_set<string>;
+
+	string tileInfo = "";
+	// 정면
+	for (int i = row - 2; i <= row + 2; i++) {
+		for (int j = col - 2; j <= col + 2; j++) {
+			tileInfo += to_string(tileArray[i][j]);
+
+		}
+	}
+
+	// 각 행에 대한 정보 추가
+	for (int i = row - 2; i <= row + 2; i++) {
+		for (int j = col - 2; j <= col + 2; j++) {
+			posMap[i * ROW_MULT + j] = tileInfo;
+		}
+	}
+	string tileInfo2 = "";
+	for (int i = tileInfo.size() - 1; i >= 0; i--) {
+		tileInfo2 += tileInfo[i];
+	}
+
+	string tileInfo3 = "";
+	// 오른쪽면
+	for (int j = col + 2; j >= col - 2; j--) {
+		for (int i = row - 2; i <= row + 2; i++) {
+			tileInfo3 += to_string(tileArray[i][j]);
+
+		}
+	}
+
+
+	string tileInfo4 = "";
+	for (int i = tileInfo3.size() - 1; i >= 0; i--) {
+		tileInfo4 += tileInfo3[i];
+	}
+
+	newTileSet->insert(tileInfo);
+	newTileSet->insert(tileInfo2);
+	newTileSet->insert(tileInfo3);
+	newTileSet->insert(tileInfo4);
+
+	return newTileSet;
+}
+
+bool isTile(int row, int col, int mPlane[MAX_SIZE][MAX_SIZE]) {
+	int starNum = 0;
+	int top = 0, left = 0, right = 0, bottom = 0;
+	for (int i = row - 2; i <= row + 2; i++) {
+		for (int j = col - 2; j <= col + 2; j++) {
+			if (mPlane[i][j] == 1) {
+				starNum += 1;
+
+				if (i == row - 2)
+					top = 1;
+
+				if (j == col - 2)
+					left = 1;
+
+				if (i == row + 2)
+					bottom = 1;
+
+				if (j == col + 2)
+					right = 1;
+			}
+		}
+	}
+
+	if (starNum == 7 && top + left + right + bottom == 4) {
+		return true;
+	}
+
+	return false;
+}
+
+void init(int N, int mPlane[MAX_SIZE][MAX_SIZE])
+{
+	tileMap.clear();
+	posMap.clear();
+
+	for (int i = 2; i < N - 2; i++) {
+		for (int j = 2; j < N - 2; j++) {
+			if (isTile(i, j, mPlane)) {
+				tileSet = getTileInfo(i, j, mPlane);
+
+				for (auto it = tileSet->begin(); it != tileSet->end(); it++) {
+					tileMap[*it].push_back(i * ROW_MULT + j);
+				}
+
+
+			}
+		}
+	}
+}
+
+int getCount(int mPiece[5][5])
+{
+	string tmp = "";
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			tmp += to_string(mPiece[i][j]);
+		}
+	}
+
+	return tileMap[tmp].size();
+}
+
+int getPosition(int mRow, int mCol)
+{
+	int target = mRow * ROW_MULT + mCol;
+	string tileInfo = posMap[target];
+
+	int result = *tileMap[tileInfo].begin();
+
+	return result;
+}
